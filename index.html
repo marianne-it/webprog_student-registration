@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NU Student Registration System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b5998 50%, #1e3a8a 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .landing-page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .nu-logo {
+            width: 150px;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+            animation: floatAnimation 3s ease-in-out infinite;
+        }
+
+        @keyframes floatAnimation {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .nu-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 10px 40px rgba(0, 0, 0, 0.5));
+        }
+
+        .landing-content {
+            text-align: center;
+            color: white;
+            max-width: 800px;
+        }
+
+        .landing-content h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            color: #ffd700;
+        }
+
+        .landing-content h2 {
+            font-size: 32px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .landing-content p {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            opacity: 0.95;
+        }
+
+        .cta-button {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            color: #1e3a8a;
+            padding: 18px 50px;
+            font-size: 20px;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.6);
+        }
+
+        .cta-button:active {
+            transform: translateY(-2px);
+        }
+
+        .registration-page {
+            display: none;
+            min-height: 100vh;
+            padding: 40px 20px;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { 
+                opacity: 0;
+                transform: translateX(100%);
+            }
+            to { 
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .registration-page.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .form-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            padding: 40px;
+            max-width: 550px;
+            width: 100%;
+            position: relative;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: #1e3a8a;
+            background: none;
+            border:none; 
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            color: #3b5998;
+            transform: translateX(-5px);
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+            margin-top: 20px;
+        }
+
+        .form-header .mini-logo {
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+        }
+
+        .form-header .mini-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
+        }
+
+        .form-header h1 {
+            color: #1e3a8a;
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .form-header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #1e3a8a;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #1e3a8a;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+        }
+
+        .error {
+            border-color: #e74c3c !important;
+        }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b5998 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(30, 58, 138, 0.4);
+        }
+
+        .submit-button:active {
+            transform: translateY(0);
+        }
+
+        .submit-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .decoration {
+            position: fixed;
+            border-radius: 50%;
+            opacity: 0.1;
+            pointer-events: none;
+        }
+
+        .decoration-1 {
+            width: 300px;
+            height: 300px;
+            background: #ffd700;
+            top: -100px;
+            right: -100px;
+        }
+
+        .decoration-2 {
+            width: 200px;
+            height: 200px;
+            background: #ffd700;
+            bottom: -50px;
+            left: -50px;
+        }
+
+        @media (max-width: 768px) {
+            .landing-content h1 {
+                font-size: 36px;
+            }
+            
+            .landing-content h2 {
+                font-size: 24px;
+            }
+            
+            .landing-content p {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="decoration decoration-1"></div>
+    <div class="decoration decoration-2"></div>
+
+    <div class="landing-page" id="landingPage">
+        <div class="nu-logo">
+            <img src="src/nu-logo.png" alt="National University Logo">
+        </div>
+        
+        <div class="landing-content">
+            <h1>We want U to be part of NU!</h1>
+            <h2>NATIONAL UNIVERSITY</h2>
+            <p>
+                National University now offers you the most convenient way to reach your dreams. 
+                Start your career here and make your dreams your reality. Join us and unleash 
+                the best version of you, only here in NU!
+            </p>
+            <button class="cta-button" onclick="showRegistration()">
+                Register Now
+            </button>
+        </div>
+    </div>
+
+    <div class="registration-page" id="registrationPage">
+        <div class="form-container">
+            <button class="back-button" onclick="showLanding()">← Back to Home</button>
+            
+            <div class="form-header">
+                <div class="mini-logo">
+                    <img src="src/nu-logo.png" alt="NU Logo">
+                </div>
+                <h1>Student Registration</h1>
+                <p>National University - Established 1900</p>
+            </div>
+            
+            <form id="registrationForm">
+                <div class="form-group">
+                    <label for="studentName">Student Name *</label>
+                    <input 
+                        type="text" 
+                        id="studentName" 
+                        name="studentName" 
+                        placeholder="Enter your full name"
+                    >
+                    <div class="error-message" id="nameError">Please enter your name</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address *</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        placeholder="student@example.com"
+                    >
+                    <div class="error-message" id="emailError">Please enter a valid email</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="course">Course *</label>
+                    <select id="course" name="course">
+                        <option value="">-- Select a Course --</option>
+                        <option value="Computer Engineering">Computer Science</option>
+                        <option value="Information Technology">Information Technology</option>
+                        <option value="Civil Engineering">Business Administration</option>
+                        <option value="Financial Management">Financial Management</option>
+                        <option value="Marketing Management">Marketing Management</option>
+                        <option value="Accountancy">Accountancy</option>
+                        <option value="Psychology">Psychology</option>
+                        <option value="Communications">Communications</option>
+                        <option value="Architecture">Architecture</option>
+                    </select>
+                    <div class="error-message" id="courseError">Please select a course</div>
+                </div>
+
+                <button type="submit" class="submit-button" id="submitBtn">
+                    Register
+                </button>
+            </form>
+
+            <div class="message" id="message"></div>
+        </div>
+    </div>
+
+    <script>
+        function showRegistration() {
+            document.getElementById('landingPage').style.display = 'none';
+            document.getElementById('registrationPage').classList.add('active');
+        }
+
+        function showLanding() {
+            document.getElementById('registrationPage').classList.remove('active');
+            document.getElementById('landingPage').style.display = 'flex';
+            document.getElementById('registrationForm').reset();
+            document.getElementById('message').className = 'message';
+            document.querySelectorAll('.error').forEach(function(el) {
+                el.classList.remove('error');
+            });
+            document.querySelectorAll('.error-message').forEach(function(el) {
+                el.classList.remove('show');
+            });
+        }
+
+        var form = document.getElementById('registrationForm');
+        var submitBtn = document.getElementById('submitBtn');
+        var messageDiv = document.getElementById('message');
+
+        var nameInput = document.getElementById('studentName');
+        var emailInput = document.getElementById('email');
+        var courseInput = document.getElementById('course');
+
+        var nameError = document.getElementById('nameError');
+        var emailError = document.getElementById('emailError');
+        var courseError = document.getElementById('courseError');
+
+        var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        nameInput.addEventListener('input', function() {
+            validateField(nameInput, nameError);
+        });
+        
+        emailInput.addEventListener('input', function() {
+            validateField(emailInput, emailError);
+        });
+        
+        courseInput.addEventListener('change', function() {
+            validateField(courseInput, courseError);
+        });
+
+        function validateField(input, errorElement) {
+            if (input.value.trim() === '') {
+                input.classList.add('error');
+                errorElement.classList.add('show');
+                return false;
+            } else if (input.type === 'email' && !emailRegex.test(input.value)) {
+                input.classList.add('error');
+                errorElement.textContent = 'Please enter a valid email address';
+                errorElement.classList.add('show');
+                return false;
+            } else {
+                input.classList.remove('error');
+                errorElement.classList.remove('show');
+                return true;
+            }
+        }
+
+        function validateForm() {
+            var isValid = true;
+            if (!validateField(nameInput, nameError)) isValid = false;
+            if (!validateField(emailInput, emailError)) isValid = false;
+            if (!validateField(courseInput, courseError)) isValid = false;
+            return isValid;
+        }
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            messageDiv.className = 'message';
+            messageDiv.textContent = '';
+
+            if (!validateForm()) {
+                showMessage('Please fill in all required fields correctly', 'error');
+                return;
+            }
+
+            var formData = {
+                studentName: nameInput.value.trim(),
+                email: emailInput.value.trim(),
+                course: courseInput.value
+            };
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = 'Registering... <span class="loading"></span>';
+
+            fetch('register.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(function(response) {
+                return response.json();
+            })
+            .then(function(result) {
+                if (result.success) {
+                    showMessage(result.message || 'Registration Successful! Welcome to NU!', 'success');
+                    form.reset();
+                    document.querySelectorAll('.error').forEach(function(el) {
+                        el.classList.remove('error');
+                    });
+                } else {
+                    showMessage(result.message || 'Missing or Invalid Data', 'error');
+                }
+            })
+            .catch(function(error) {
+                showMessage('Unable to connect to server. Please try again.', 'error');
+                console.error('Error:', error);
+            })
+            .finally(function() {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Register Student';
+            });
+        });
+
+        function showMessage(text, type) {
+            messageDiv.textContent = text;
+            messageDiv.className = 'message ' + type;
+        }
+    </script>
+</body>
+</html>
