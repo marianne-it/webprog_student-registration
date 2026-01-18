@@ -1,24 +1,21 @@
 <?php
-// Enable error reporting for debugging (remove in production)
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// Allow CORS (Cross-Origin Resource Sharing) for front-end to communicate
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST, GET, OPTIONS, DELETE');
 header('Access-Control-Allow-Headers: Content-Type');
 header('Content-Type: application/json');
 
-// Handle preflight OPTIONS request
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit();
 }
 
 // Database configuration
-define('DB_HOST', 'localhost');
+define('DB_HOST', 'localhost:3307');
 define('DB_USER', 'root');
-define('DB_PASS', '');  // Default XAMPP password is empty
+define('DB_PASS', '');
 define('DB_NAME', 'nu_students_db');
 
 // Create database connection
